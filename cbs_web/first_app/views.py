@@ -1,6 +1,8 @@
+from http import HTTPStatus
+
 from django.http import HttpResponse
 from django.http.response import HttpResponseForbidden
-
+from django.views.generic import View
 
 # from django.shortcuts import render
 
@@ -33,3 +35,10 @@ def get_news_by_id(request, news_id):
 def regexp_route(request, news_title):
     print(f"Search for news with title: {news_title}")
     return HttpResponse()
+
+
+class CommentsView(View):
+    def get(self, request):
+        print("Get all comments")
+        return HttpResponse("All comments")
+
