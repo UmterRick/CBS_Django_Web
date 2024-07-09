@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{%  block tab_name %} All News {% endblock %}
+{% block content %}
+    <h1> Welcome to News Page</h1>
+        <ul>
+        {% for item in news %}
+            <li>{{ item|truncatewords:5 }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

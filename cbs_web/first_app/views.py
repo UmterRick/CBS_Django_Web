@@ -1,10 +1,11 @@
-from http import HTTPStatus
+import datetime
 
 from django.http import HttpResponse
 from django.http.response import HttpResponseForbidden
 from django.views.generic import View
 
-# from django.shortcuts import render
+from django.shortcuts import render
+
 
 # Create your views here.
 def index(request):
@@ -22,7 +23,14 @@ def html_response(request):
 
 
 def get_all_news(request):
-    return HttpResponse()
+    news_list = [
+        "Content 1 too many words",
+        "Content words 2",
+        "Content 3",
+        "Content 4",
+        "Content 5",
+    ]
+    return render(request, "news.html", context={"news": news_list})
 
 
 def get_news_by_id(request, news_id):
@@ -31,6 +39,7 @@ def get_news_by_id(request, news_id):
 
     print(f"Get News with id={news_id}", type(news_id))
     return HttpResponse(f"<b> News(id={news_id}) </b>")
+
 
 def regexp_route(request, news_title):
     print(f"Search for news with title: {news_title}")
@@ -42,3 +51,10 @@ class CommentsView(View):
         print("Get all comments")
         return HttpResponse("All comments")
 
+
+def app_main_page(request):
+    print("Somebody request access to main page")
+    page_context = {
+        "render_datetime": datetime.datetime.now()
+    }
+    return render(request=request, template_name="index.html", context=page_context)

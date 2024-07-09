@@ -1,0 +1,39 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/download.jpeg' %}">
+
+    <title> CBS-APP:{% block tab_name %} Document {% endblock %}</title>
+</head>
+<body>
+<header style="border: 1px solid red">
+    <p>I AM HEADER</p>
+    <p> Page was opened at {{ render_datetime }} by server time</p>
+    {% if request.user.is_staff %}
+        <div> Hello manager, nice to see you </div>
+    {%  elif  request.user.is_anonymous%}
+        <div> Hello stranger, please LOGIN </div>
+    {% else %}
+        <div> Hello  {% if request.user.username %} {{ request.user.username }}  {% else %} USER  {% endif %}, please LOGIN </div>
+    {% endif %}
+
+
+
+
+</header>
+<div id="content-container" style="border: 1px solid green">
+    {% block content %}
+    {% endblock %}
+</div>
+<footer style="border: 1px solid blue">
+    <p>I AM FOOTER</p>
+
+</footer>
+</body>
+</html>
