@@ -4,7 +4,9 @@ from django.http import HttpResponse
 from django.http.response import HttpResponseForbidden
 from django.views.generic import View
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from forms import SomeForm, EmployeeForm, TicketForm
 
 
 # Create your views here.
@@ -58,3 +60,14 @@ def app_main_page(request):
         "render_datetime": datetime.datetime.now()
     }
     return render(request=request, template_name="index.html", context=page_context)
+
+
+def render_some_form(request):
+    form = TicketForm(request.POST or None)
+    if request.method == "GET":
+        return render(request=request, template_name="user_form.html", context={"form": form})
+    elif request.method == "POST":
+        all_is_ok = form.is_valid()
+        if all_is_ok:
+            return redirect("app_main_page")
+        return render(request=request, template_name="user_form.html", context={"form": form})
