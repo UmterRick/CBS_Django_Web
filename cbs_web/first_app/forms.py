@@ -33,4 +33,5 @@ class TicketForm(forms.ModelForm):
     
     class Meta:
         model = Ticket
-        fields = ("flight", "seat", "type")
+        fields = ("seat", "type", "gate", "passenger")
+

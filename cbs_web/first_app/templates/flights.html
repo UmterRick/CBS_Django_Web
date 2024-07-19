@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{%  block tab_name %} Main Page {% endblock %}
+
+{% block content %}
+    {% for flight in flights %}
+        <div style="border: green 2px solid">
+            <h3>
+                {{ flight.departure }} - {{flight.destination}}
+            </h3>
+            <h4> Date: {{ flight.datetime.date }}  Time: {{ flight.datetime.time }}</h4>
+            <div  style="border: red 2px solid">
+                <h4> Plane Info</h4>
+                <p> {{ flight.plane.model }} {{ flight.plane.serial_number}}</p>
+            </div>
+            <a href="{% url 'buy_ticket' flight_id=flight.id%}"><button>Get Ticket</button> </a>
+        </div>
+    {%  endfor %}
+{% endblock %}

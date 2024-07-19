@@ -1,12 +1,14 @@
 import datetime
 
+from django.db.models.signals import post_init
 from django.http import HttpResponse
 from django.http.response import HttpResponseForbidden
 from django.views.generic import View
 
 from django.shortcuts import render, redirect
 
-from forms import SomeForm, EmployeeForm, TicketForm
+from .forms import TicketForm
+from .models import Plane, Flight, Passenger, Ticket
 
 
 # Create your views here.
@@ -62,12 +64,39 @@ def app_main_page(request):
     return render(request=request, template_name="index.html", context=page_context)
 
 
-def render_some_form(request):
+def buy_ticket(request, flight_id):
     form = TicketForm(request.POST or None)
     if request.method == "GET":
-        return render(request=request, template_name="user_form.html", context={"form": form})
+        return render(request=request, template_name="ticket.html", context={"form": form})
     elif request.method == "POST":
+        flight = Flight.objects.get(id=flight_id)
         all_is_ok = form.is_valid()
         if all_is_ok:
+            ticket = form.save(commit=False)
+            ticket.flight = flight
+            ticket.save()
             return redirect("app_main_page")
-        return render(request=request, template_name="user_form.html", context={"form": form})
+        return render(request=request, template_name="ticket.html", context={"form": form})
+
+
+def create_new_plane(request):
+    # Method 1
+    # p = Plane(serial_number=4875, model="Boeing", seats=250, is_available=False)
+    # p.save()
+
+    # Method 2
+    Plane.objects.create(serial_number=1111, model="Boeing 2", seats=130, is_available=True)
+    return HttpResponse(status=200)
+
+
+
+def get_flights(request, **kwargs):
+    flights = Flight.objects.all()
+    return render(request, "flights.html", context={"flights": flights})
+
+def receiver_example(**kwargs):
+    print("Post init happened")
+    print(kwargs)
+
+
+post_init.connect(receiver=receiver_example)
